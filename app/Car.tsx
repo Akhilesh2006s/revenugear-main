@@ -447,7 +447,7 @@ export default function Component() {
   // Model opacity, scale, and blur based on scroll
   const modelOpacity = useTransform(scrollYProgress, [0.7, 0.8], [1, 0])
   const modelScale = useTransform(scrollYProgress, [0.7, 0.8], [1, 0.3])
-  const modelBlur = useTransform(scrollYProgress, [0.4, 0.7], [0, 0.5])
+  const modelBlur = useTransform(scrollYProgress, [0.6, 0.75], [0, 20])
 
   const [scrollDirection, setScrollDirection] = useState("up")
   const [lastScrollY, setLastScrollY] = useState(0)
@@ -511,7 +511,7 @@ export default function Component() {
 
         {/* Contact Button */}
         <motion.a
-          href="https://revlabs.tech/#contact" // Replace with your desired URL
+          href="https://example.com" // Replace with your desired URL
           target="_blank"
           rel="noopener noreferrer"
           className="bg-[#006C67] text-white px-6 py-3 rounded-full hover:bg-[#006F74] transition-all duration-300 font-medium tracking-wide font-['Poppins',sans-serif] shadow-lg inline-block"
@@ -543,7 +543,7 @@ export default function Component() {
           <div className="text-center mb-12">
             <div className="mb-8 overflow-hidden">
               <StaggeredFlyText
-                text="WELCOME TO"
+                text="WELCOME"
                 className="text-6xl md:text-8xl font-light text-[#006C67] tracking-wider leading-tight
                            hover:text-[#006F74] transition-all duration-700 ease-out cursor-default
                            hover:tracking-widest transform hover:scale-105
@@ -630,15 +630,11 @@ export default function Component() {
               </h2>
             </FlyText>
             <FlyText delay={0.4} flyDirection="up" flyDistance={150}>
-                  <motion.button
-            className="bg-[#006C67] text-white px-12 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-['Poppins',sans-serif] hover:bg-[#006F74]"
-            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0, 108, 103, 0.3)" }}
-            whileTap={{ scale: 0.95 }}
-          >
-Customers are signaling churn, missed appointments, poor service, repeat issues — All revenue leak
+              <p className="text-xl text-[#4B9C99] leading-relaxed font-light font-['Poppins',sans-serif]">
+                Customers are signaling churn, missed appointments, poor service, repeat issues — All revenue leak
                 signals! RevenueGear captures 100% of customer voice & revenue leak signals so your team can act before
-                the revenue goes away          </motion.button>
-             
+                the revenue goes away.{" "}
+              </p>
             </FlyText>
           </div>
         </div>
