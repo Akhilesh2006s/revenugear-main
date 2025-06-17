@@ -630,11 +630,15 @@ export default function Component() {
               </h2>
             </FlyText>
             <FlyText delay={0.4} flyDirection="up" flyDistance={150}>
-              <p className="text-xl text-[#4B9C99] leading-relaxed font-light font-['Poppins',sans-serif]">
-                Customers are signaling churn, missed appointments, poor service, repeat issues — All revenue leak
+                  <motion.button
+            className="bg-[#006C67] text-white px-12 py-4 rounded-full text-lg font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl font-['Poppins',sans-serif] hover:bg-[#006F74]"
+            whileHover={{ scale: 1.05, boxShadow: "0 20px 40px rgba(0, 108, 103, 0.3)" }}
+            whileTap={{ scale: 0.95 }}
+          >
+Customers are signaling churn, missed appointments, poor service, repeat issues — All revenue leak
                 signals! RevenueGear captures 100% of customer voice & revenue leak signals so your team can act before
-                the revenue goes away.{" "}
-              </p>
+                the revenue goes away          </motion.button>
+             
             </FlyText>
           </div>
         </div>
