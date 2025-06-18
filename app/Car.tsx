@@ -1,12 +1,12 @@
 "use client"
 
 import type React from "react"
-
 import { useRef, useEffect, useState } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { useGLTF, Environment, PerspectiveCamera } from "@react-three/drei"
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion"
 import type { Group } from "three"
+// import useSound from "use-sound"
 
 interface RotatingModelProps {
   scrollY: number
@@ -23,10 +23,25 @@ function RotatingModel({ scrollY }: RotatingModelProps) {
     }
   })
 
+  useEffect(() => {
+    scene.traverse((child: any) => {
+      if (child.isMesh && child.material) {
+        if (Array.isArray(child.material)) {
+          child.material.forEach((material: any) => {
+            material.transparent = true
+            material.opacity = 0.25
+          })
+        } else {
+          child.material.transparent = true
+          child.material.opacity = 0.5
+        }
+      }
+    })
+  }, [scene])
+
   return (
     <group ref={modelRef} scale={[1, 1, 1]} position={[0, -1.8, 0]}>
       <primitive object={scene} />
-      <meshStandardMaterial color="white" opacity={0.2} transparent={true} attach="material" />
     </group>
   )
 }
@@ -49,14 +64,13 @@ function Scene({ scrollY }: SceneProps) {
   )
 }
 
-// Enhanced FlyText component with dramatic entrance and exit animations
 const FlyText = ({
   children,
   className = "",
   delay = 0,
   duration = 0.8,
   threshold = 0.1,
-  flyDirection = "up", // "up", "down", "left", "right"
+  flyDirection = "up",
   flyDistance = 100,
   scale = true,
 }: {
@@ -75,7 +89,6 @@ const FlyText = ({
     margin: `-${threshold * 100}% 0px -${threshold * 100}% 0px`,
   })
 
-  // Set initial and animate properties based on flyDirection
   let initialX = 0
   let initialY = 0
   let exitX = 0
@@ -142,7 +155,6 @@ const FlyText = ({
   )
 }
 
-// Staggered text animation with dramatic fly-in/fly-out for each letter
 const StaggeredFlyText = ({
   text,
   className = "",
@@ -164,7 +176,6 @@ const StaggeredFlyText = ({
   const isInView = useInView(ref, { once: false, margin: "-10% 0px -10% 0px" })
   const letters = text.split("")
 
-  // Set initial and animate properties based on flyDirection
   let initialX = 0
   let initialY = 0
   let exitX = 0
@@ -248,7 +259,6 @@ const StaggeredFlyText = ({
   )
 }
 
-// Highlighted statistic component with dramatic animation
 const StatisticHighlight = ({
   number,
   text,
@@ -310,7 +320,6 @@ const StatisticHighlight = ({
   )
 }
 
-// Glare Card Component with glass effect
 const GlareCard = ({
   title,
   icon,
@@ -348,7 +357,6 @@ const GlareCard = ({
         }}
         transition={{ type: "spring", stiffness: 300, damping: 20 }}
       >
-        {/* Glare effect */}
         <motion.div
           className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
           style={{
@@ -356,10 +364,8 @@ const GlareCard = ({
           }}
         />
 
-        {/* Glass reflection */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent opacity-60" />
 
-        {/* Animated border shine */}
         <motion.div
           className="absolute inset-0 rounded-2xl border-2 border-transparent bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           animate={{
@@ -376,7 +382,6 @@ const GlareCard = ({
         />
 
         <div className="relative z-10">
-          {/* Icon with enhanced animation */}
           <motion.div
             className="text-6xl mb-6 text-center"
             whileHover={{
@@ -389,7 +394,6 @@ const GlareCard = ({
             {icon}
           </motion.div>
 
-          {/* Title */}
           <StaggeredFlyText
             text={title}
             className="text-xl font-bold text-[#006C67] mb-4 text-center leading-tight font-['Poppins',sans-serif]"
@@ -397,14 +401,12 @@ const GlareCard = ({
             staggerDelay={0.02}
           />
 
-          {/* Description */}
           <FlyText delay={0.3} flyDirection="up">
             <p className="text-[#4B9C99] text-center leading-relaxed font-light font-['Poppins',sans-serif] group-hover:text-[#006F74] transition-colors duration-300">
               {desc}
             </p>
           </FlyText>
 
-          {/* Subtle accent line */}
           <motion.div
             className="w-0 h-0.5 bg-[#006C67] mx-auto mt-6 group-hover:w-16 transition-all duration-500 rounded-full"
             initial={{ width: 0 }}
@@ -412,7 +414,6 @@ const GlareCard = ({
           />
         </div>
 
-        {/* Floating light particles */}
         <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
           {[...Array(5)].map((_, i) => (
             <motion.div
@@ -443,24 +444,32 @@ const GlareCard = ({
 export default function Component() {
   const [scrollY, setScrollY] = useState(0)
   const { scrollYProgress } = useScroll()
+  const [scrollDirection, setScrollDirection] = useState("up")
+  const [lastScrollY, setLastScrollY] = useState(0)
+  const [isMuted, setIsMuted] = useState(true)
+  const [audioAllowed, setAudioAllowed] = useState(false)
+
+  // Initialize audio
+  // const [play, { stop }] = useSound("/1.mp3", {
+  //   loop: true,
+  //   volume: 0.5,
+  //   interrupt: true,
+  // })
+
+  // Video ref for hidden video element
+  const videoRef = useRef<HTMLVideoElement>(null)
 
   // Model opacity, scale, and blur based on scroll
   const modelOpacity = useTransform(scrollYProgress, [0.7, 0.8], [1, 0])
   const modelScale = useTransform(scrollYProgress, [0.7, 0.8], [1, 0.3])
-  const modelBlur = useTransform(scrollYProgress, [0.6, 0.75], [0, 20])
-
-  const [scrollDirection, setScrollDirection] = useState("up")
-  const [lastScrollY, setLastScrollY] = useState(0)
 
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY
 
       if (currentScrollY > lastScrollY && currentScrollY > 100) {
-        // Scrolling down and past 100px
         setScrollDirection("down")
       } else if (currentScrollY < lastScrollY) {
-        // Scrolling up
         setScrollDirection("up")
       }
 
@@ -472,8 +481,105 @@ export default function Component() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [lastScrollY])
 
+  // Handle audio permission and autoplay
+  useEffect(() => {
+    // Try to play audio when user interacts with the page
+    const handleUserInteraction = () => {
+      if (!audioAllowed) {
+        setAudioAllowed(true)
+        if (videoRef.current) {
+          videoRef.current.play()
+        }
+        document.removeEventListener("click", handleUserInteraction)
+        document.removeEventListener("scroll", handleUserInteraction)
+      }
+    }
+
+    document.addEventListener("click", handleUserInteraction)
+    document.addEventListener("scroll", handleUserInteraction)
+
+    return () => {
+      document.removeEventListener("click", handleUserInteraction)
+      document.removeEventListener("scroll", handleUserInteraction)
+    }
+  }, [audioAllowed])
+
+  const toggleMute = () => {
+    setIsMuted(!isMuted)
+    if (videoRef.current) {
+      if (isMuted) {
+        videoRef.current.play()
+        videoRef.current.muted = false
+      } else {
+        videoRef.current.pause()
+        videoRef.current.muted = true
+      }
+    }
+  }
+
   return (
     <div className="relative min-h-screen bg-[#E6F6F7]">
+      {/* Hidden Video for Audio */}
+      <video
+        ref={videoRef}
+        loop
+        muted={isMuted}
+        playsInline
+        preload="auto"
+        style={{ display: "none" }}
+        onLoadedData={() => {
+          if (videoRef.current) {
+            videoRef.current.volume = 0.5
+          }
+        }}
+      >
+        <source src="/4.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      {/* Audio Control Button */}
+      <motion.button
+        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[#006C67] text-white flex items-center justify-center shadow-lg"
+        onClick={toggleMute}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+      >
+        {isMuted ? (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        ) : (
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+        )}
+      </motion.button>
+
       {/* Navigation Header */}
       <motion.nav
         className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-6 md:p-8 bg-white/20 backdrop-blur-md border-b border-white/30"
@@ -488,7 +594,6 @@ export default function Component() {
           ease: "easeInOut",
         }}
       >
-        {/* Logo */}
         <motion.div
           className="flex items-center space-x-3"
           whileHover={{ scale: 1.05 }}
@@ -509,9 +614,8 @@ export default function Component() {
           />
         </motion.div>
 
-        {/* Contact Button */}
         <motion.a
-          href="https://example.com" // Replace with your desired URL
+          href="https://example.com"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-[#006C67] text-white px-6 py-3 rounded-full hover:bg-[#006F74] transition-all duration-300 font-medium tracking-wide font-['Poppins',sans-serif] shadow-lg inline-block"
@@ -528,7 +632,6 @@ export default function Component() {
         style={{
           opacity: modelOpacity,
           scale: modelScale,
-          filter: modelBlur.get() ? `blur(${modelBlur.get()}px)` : "none",
         }}
       >
         <Canvas className="w-full h-full">
@@ -573,7 +676,6 @@ export default function Component() {
             </div>
           </div>
 
-          {/* Scroll Indicator */}
           <motion.div
             className="absolute bottom-12 left-1/2 transform -translate-x-1/2"
             style={{
@@ -618,8 +720,6 @@ export default function Component() {
             </div>
           </FlyText>
         </div>
-
-        {/* Transition Section */}
 
         {/* Final Transition */}
         <div className="h-screen flex items-center justify-center">
