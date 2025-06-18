@@ -573,8 +573,8 @@ export default function Component() {
     <div className="relative min-h-screen bg-[#E6F6F7]">
       {/* Audio Element - plays once until it ends */}
       <audio ref={audioRef} preload="auto" style={{ display: "none" }}>
-        <source src="/5.mp4" type="audio/mp4" />
-        <source src="/5.mp3" type="audio/mpeg" />
+        <source src="/6.mp4" type="audio/mp4" />
+        <source src="/6.mp3" type="audio/mpeg" />
         <source src="/audio.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
