@@ -573,8 +573,8 @@ export default function Component() {
     <div className="relative min-h-screen bg-[#E6F6F7]">
       {/* Audio Element - plays once until it ends */}
       <audio ref={audioRef} preload="auto" style={{ display: "none" }}>
-        <source src="6.mp4" type="audio/mp4" />
-        <source src="6.mp3" type="audio/mpeg" />
+        <source src="/5.mp4" type="audio/mp4" />
+        <source src="/5.mp3" type="audio/mpeg" />
         <source src="/audio.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
@@ -607,7 +607,7 @@ export default function Component() {
             }}
             transition={{ duration: 0.6 }}
           >
-            <img src="logo1.png" alt="Revenue Gear Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain" />
+            <img src="/logo1.png" alt="Revenue Gear Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain" />
           </motion.div>
 
           <motion.div
@@ -686,10 +686,10 @@ export default function Component() {
             <div className="mb-8 overflow-hidden">
               <StaggeredFlyText
                 text="WELCOME TO"
-                className="text-6xl md:text-8xl font-light text-[#006C67] tracking-wider leading-tight
+                 className="text-5xl md:text-7xl font-semibold text-[#006C67] tracking-wider leading-tight
                    hover:text-[#006F74] transition-all duration-700 ease-out cursor-default
                    hover:tracking-widest transform hover:scale-105
-                   font-['Space_Grotesk',sans-serif] antialiased"
+                   font-['Playfair_Display',serif] antialiased"
                 flyDirection="left"
                 flyDistance={100}
               />
