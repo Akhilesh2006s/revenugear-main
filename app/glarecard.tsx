@@ -57,8 +57,8 @@ export default function StackedGlareCards() {
             onClick={() => setActiveTab(index)}
             className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
               activeTab === index
-                ? "bg-[#006C67] text-white shadow-lg scale-105"
-                : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                ? "bg-gray-200 text-gray-700 hover:bg-gray-105"
+                : "bg-[#006C67] text-white shadow-lg scale-300"
             }`}
           >
             {feature.shortTitle}
@@ -115,7 +115,7 @@ export default function StackedGlareCards() {
             key={index}
             onClick={() => setActiveTab(index)}
             className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              activeTab === index ? "bg-[#006C67] scale-125" : "bg-gray-300 hover:bg-gray-400"
+              activeTab === index ? "bg-gray-300 hover:bg-gray-400" : " bg-[#006C67] scale-125"
             }`}
           />
         ))}
