@@ -23,22 +23,6 @@ function RotatingModel({ scrollY }: RotatingModelProps) {
     }
   })
 
-  useEffect(() => {
-    scene.traverse((child: any) => {
-      if (child.isMesh && child.material) {
-        if (Array.isArray(child.material)) {
-          child.material.forEach((material: any) => {
-            material.transparent = true
-            material.opacity = 0.25
-          })
-        } else {
-          child.material.transparent = true
-          child.material.opacity = 0.5
-        }
-      }
-    })
-  }, [scene])
-
   return (
     <group ref={modelRef} scale={[1, 1, 1]} position={[0, -1.8, 0]}>
       <primitive object={scene} />
@@ -60,6 +44,12 @@ function Scene({ scrollY }: SceneProps) {
       <spotLight position={[0, 10, 0]} intensity={0.8} angle={0.3} penumbra={1} />
       <RotatingModel scrollY={scrollY} />
       <Environment preset="city" />
+
+      {/* White transparent overlay */}
+      <mesh position={[0, 0, 4.9]}>
+        <planeGeometry args={[20, 20]} />
+        <meshBasicMaterial color="white" transparent={true} opacity={0.3} />
+      </mesh>
     </>
   )
 }
@@ -446,22 +436,120 @@ export default function Component() {
   const { scrollYProgress } = useScroll()
   const [scrollDirection, setScrollDirection] = useState("up")
   const [lastScrollY, setLastScrollY] = useState(0)
-  const [isMuted, setIsMuted] = useState(true)
-  const [audioAllowed, setAudioAllowed] = useState(false)
 
-  // Initialize audio
-  // const [play, { stop }] = useSound("/1.mp3", {
-  //   loop: true,
-  //   volume: 0.5,
-  //   interrupt: true,
-  // })
+  // Model opacity and scale - instant disappear when reaching "Experience the Difference" section
+  const modelOpacity = useTransform(scrollYProgress, [0.65, 0.66], [1, 0])
+  const modelScale = useTransform(scrollYProgress, [0.65, 0.66], [1, 1])
 
-  // Video ref for hidden video element
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const [audioStarted, setAudioStarted] = useState(false)
+  const audioRef = useRef<HTMLAudioElement>(null)
 
-  // Model opacity, scale, and blur based on scroll
-  const modelOpacity = useTransform(scrollYProgress, [0.7, 0.8], [1, 0])
-  const modelScale = useTransform(scrollYProgress, [0.7, 0.8], [1, 0.3])
+  // Audio handling - more aggressive autoplay detection
+  useEffect(() => {
+    let hasTriedAutoplay = false
+
+    const tryPlayAudio = async () => {
+      if (!audioRef.current || audioStarted) return
+
+      try {
+        audioRef.current.volume = 0.5
+        await audioRef.current.play()
+        setAudioStarted(true)
+        console.log("Audio started successfully")
+        return true
+      } catch (error) {
+        console.log("Audio play attempt failed:", error)
+        return false
+      }
+    }
+
+    // Try to play immediately on component mount
+    const attemptAutoplay = async () => {
+      if (hasTriedAutoplay) return
+      hasTriedAutoplay = true
+
+      const success = await tryPlayAudio()
+      if (success) {
+        // Remove all listeners if successful
+        document.removeEventListener("click", handleInteraction)
+        document.removeEventListener("scroll", handleInteraction)
+        document.removeEventListener("touchstart", handleInteraction)
+        document.removeEventListener("keydown", handleInteraction)
+        document.removeEventListener("mousemove", handleInteraction)
+        window.removeEventListener("focus", handleInteraction)
+      }
+    }
+
+    const handleInteraction = async () => {
+      const success = await tryPlayAudio()
+      if (success) {
+        // Remove all listeners after successful start
+        document.removeEventListener("click", handleInteraction)
+        document.removeEventListener("scroll", handleInteraction)
+        document.removeEventListener("touchstart", handleInteraction)
+        document.removeEventListener("keydown", handleInteraction)
+        document.removeEventListener("mousemove", handleInteraction)
+        window.removeEventListener("focus", handleInteraction)
+      }
+    }
+
+    // Try autoplay first
+    attemptAutoplay()
+
+    // Add multiple event listeners for user interaction
+    document.addEventListener("click", handleInteraction, { passive: true })
+    document.addEventListener("scroll", handleInteraction, { passive: true })
+    document.addEventListener("touchstart", handleInteraction, { passive: true })
+    document.addEventListener("keydown", handleInteraction, { passive: true })
+    document.addEventListener("mousemove", handleInteraction, { passive: true })
+    window.addEventListener("focus", handleInteraction, { passive: true })
+
+    return () => {
+      document.removeEventListener("click", handleInteraction)
+      document.removeEventListener("scroll", handleInteraction)
+      document.removeEventListener("touchstart", handleInteraction)
+      document.removeEventListener("keydown", handleInteraction)
+      document.removeEventListener("mousemove", handleInteraction)
+      window.removeEventListener("focus", handleInteraction)
+    }
+  }, [audioStarted])
+
+  // Additional audio setup and retry mechanism
+  useEffect(() => {
+    if (!audioRef.current) return
+
+    const audio = audioRef.current
+
+    // Set up audio properties
+    audio.preload = "auto"
+    audio.volume = 0.5
+
+    // Try to load the audio
+    const handleCanPlay = () => {
+      console.log("Audio can play")
+    }
+
+    const handleLoadedData = () => {
+      console.log("Audio loaded")
+    }
+
+    const handleError = (e: Event) => {
+      console.log("Audio error:", e)
+    }
+
+    audio.addEventListener("canplay", handleCanPlay)
+    audio.addEventListener("loadeddata", handleLoadedData)
+    audio.addEventListener("error", handleError)
+
+    // Force load
+    audio.load()
+
+    return () => {
+      audio.removeEventListener("canplay", handleCanPlay)
+      audio.removeEventListener("loadeddata", handleLoadedData)
+      audio.removeEventListener("error", handleError)
+    }
+  }, [])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -481,103 +569,15 @@ export default function Component() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [lastScrollY])
 
-  // Handle audio permission and autoplay
-  useEffect(() => {
-    // Try to play audio when user interacts with the page
-    const handleUserInteraction = () => {
-      if (!audioAllowed) {
-        setAudioAllowed(true)
-        if (videoRef.current) {
-          videoRef.current.play()
-        }
-        document.removeEventListener("click", handleUserInteraction)
-        document.removeEventListener("scroll", handleUserInteraction)
-      }
-    }
-
-    document.addEventListener("click", handleUserInteraction)
-    document.addEventListener("scroll", handleUserInteraction)
-
-    return () => {
-      document.removeEventListener("click", handleUserInteraction)
-      document.removeEventListener("scroll", handleUserInteraction)
-    }
-  }, [audioAllowed])
-
-  const toggleMute = () => {
-    setIsMuted(!isMuted)
-    if (videoRef.current) {
-      if (isMuted) {
-        videoRef.current.play()
-        videoRef.current.muted = false
-      } else {
-        videoRef.current.pause()
-        videoRef.current.muted = true
-      }
-    }
-  }
-
   return (
     <div className="relative min-h-screen bg-[#E6F6F7]">
-      {/* Hidden Video for Audio */}
-      <video
-        ref={videoRef}
-        muted={isMuted}
-        playsInline
-        preload="auto"
-        style={{ display: "none" }}
-        onLoadedData={() => {
-          if (videoRef.current) {
-            videoRef.current.volume = 0.5
-          }
-        }}
-      >
-        <source src="/5.mp4" type="video/mp4" />
-        Your browser does not support the video tag.
-      </video>
-      {/* Audio Control Button */}
-      <motion.button
-        className="fixed bottom-6 right-6 z-50 w-12 h-12 rounded-full bg-[#006C67] text-white flex items-center justify-center shadow-lg"
-        onClick={toggleMute}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-      >
-        {isMuted ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <line x1="23" y1="9" x2="17" y2="15"></line>
-            <line x1="17" y1="9" x2="23" y2="15"></line>
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-          </svg>
-        )}
-      </motion.button>
+      {/* Audio Element - plays once until it ends */}
+      <audio ref={audioRef} preload="auto" style={{ display: "none" }}>
+        <source src="/5.mp4" type="audio/mp4" />
+        <source src="/5.mp3" type="audio/mpeg" />
+        <source src="/audio.mp3" type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
 
       {/* Navigation Header */}
       <motion.nav
