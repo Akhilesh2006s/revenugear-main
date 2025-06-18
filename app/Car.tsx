@@ -582,7 +582,7 @@ export default function Component() {
 
       {/* Navigation Header */}
       <motion.nav
-        className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-6 md:p-8 bg-white/20 backdrop-blur-md border-b border-white/30"
+        className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-4 md:p-6 bg-white/10 backdrop-blur-xl border-b border-white/20 shadow-lg"
         initial={{ opacity: 0, y: -50 }}
         animate={{
           opacity: 1,
@@ -595,35 +595,75 @@ export default function Component() {
         }}
       >
         <motion.div
-          className="flex items-center space-x-3"
-          whileHover={{ scale: 1.05 }}
+          className="flex items-center space-x-4"
+          whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
           <motion.div
-            className="w-10 h-10 bg-[#006C67] rounded-lg flex items-center justify-center"
-            whileHover={{ rotate: 360 }}
+            className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center overflow-hidden rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg"
+            whileHover={{
+              rotate: 360,
+              scale: 1.1,
+              boxShadow: "0 10px 30px rgba(0, 108, 103, 0.2)",
+            }}
             transition={{ duration: 0.6 }}
           >
-            <span className="text-white font-bold text-lg">RG</span>
+            <img src="/logo1.png" alt="Revenue Gear Logo" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
           </motion.div>
-          <StaggeredFlyText
-            text="Revenue Gear"
-            className="text-[#006C67] font-semibold text-xl tracking-wide font-['Poppins',sans-serif]"
-            delay={0.8}
-            flyDirection="down"
-          />
+
+          <motion.div
+            className="hidden md:block"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+          >
+            <h1 className="text-xl md:text-2xl font-bold text-[#006C67] tracking-wide font-['Poppins',sans-serif]">
+              Revenue Gear
+            </h1>
+            <p className="text-sm text-[#4B9C99] font-light">AI-Powered Intelligence</p>
+          </motion.div>
         </motion.div>
 
-        <motion.a
-          href="https://example.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-[#006C67] text-white px-6 py-3 rounded-full hover:bg-[#006F74] transition-all duration-300 font-medium tracking-wide font-['Poppins',sans-serif] shadow-lg inline-block"
-          whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0, 108, 103, 0.3)" }}
-          whileTap={{ scale: 0.95 }}
+        <motion.div
+          className="flex items-center space-x-4"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.4 }}
         >
-          Contact Us
-        </motion.a>
+          <motion.a
+            href="https://revlabs.tech/#contact"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-gradient-to-r from-[#006C67] to-[#006F74] text-white px-6 py-3 md:px-8 md:py-4 rounded-full hover:from-[#006F74] hover:to-[#005A5F] transition-all duration-300 font-semibold tracking-wide font-['Poppins',sans-serif] shadow-xl text-sm md:text-base relative overflow-hidden group"
+            whileHover={{
+              scale: 1.05,
+              boxShadow: "0 15px 35px rgba(0, 108, 103, 0.4)",
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <span className="relative z-10 flex items-center space-x-2">
+              <span>Contact Us</span>
+              <motion.svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                whileHover={{ x: 3 }}
+                transition={{ duration: 0.2 }}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </motion.svg>
+            </span>
+
+            {/* Animated background effect */}
+            <motion.div
+              className="absolute inset-0 bg-white/20 rounded-full"
+              initial={{ scale: 0, opacity: 0 }}
+              whileHover={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            />
+          </motion.a>
+        </motion.div>
       </motion.nav>
 
       {/* 3D Model Section */}
@@ -646,11 +686,11 @@ export default function Component() {
           <div className="text-center mb-12">
             <div className="mb-8 overflow-hidden">
               <StaggeredFlyText
-                text="WELCOME"
+                text="WELCOME TO"
                 className="text-6xl md:text-8xl font-light text-[#006C67] tracking-wider leading-tight
-                           hover:text-[#006F74] transition-all duration-700 ease-out cursor-default
-                           hover:tracking-widest transform hover:scale-105
-                           font-['Poppins',sans-serif] antialiased"
+                   hover:text-[#006F74] transition-all duration-700 ease-out cursor-default
+                   hover:tracking-widest transform hover:scale-105
+                   font-['Space_Grotesk',sans-serif] antialiased"
                 flyDirection="left"
                 flyDistance={100}
               />
@@ -659,9 +699,9 @@ export default function Component() {
               <StaggeredFlyText
                 text="REVENUE GEAR"
                 className="text-5xl md:text-7xl font-semibold text-[#006C67] tracking-wider leading-tight
-                           hover:text-[#006F74] transition-all duration-700 ease-out cursor-default
-                           hover:tracking-widest transform hover:scale-105
-                           font-['Poppins',sans-serif] antialiased"
+                   hover:text-[#006F74] transition-all duration-700 ease-out cursor-default
+                   hover:tracking-widest transform hover:scale-105
+                   font-['Playfair_Display',serif] antialiased"
                 delay={0.5}
                 flyDirection="right"
                 flyDistance={100}
