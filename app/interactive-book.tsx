@@ -5,7 +5,7 @@ import { X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
-export default function Component() {
+export default function InteractiveBook() {
   const [isOpen, setIsOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
   const [isFlipping, setIsFlipping] = useState(false)
@@ -14,19 +14,19 @@ export default function Component() {
   const lastScrollTime = useRef(0)
 
   const pages = [
-    { title: "Page 1", image: "1.png" },
-    { title: "Page 2", image: "2.png" },
-    { title: "Page 3", image: "3.png" },
-    { title: "Page 4", image: "4.png" },
-    { title: "Page 5", image: "5.png" },
-    { title: "Page 6", image: "6.png" },
-    { title: "Page 7", image: "7.png" },
-    { title: "Page 8", image: "8.png" },
-    { title: "Page 9", image: "9.png" },
-    { title: "Page 10", image: "10.png" },
-    { title: "Page 11", image: "11.png" },
-    { title: "Page 12", image: "12.png" },
-    { title: "Page 13", image: "13.png" },
+    { title: "Page 1", image: "/1.png" },
+    { title: "Page 2", image: "/2.png" },
+    { title: "Page 3", image: "/3.png" },
+    { title: "Page 4", image: "/4.png" },
+    { title: "Page 5", image: "/5.png" },
+    { title: "Page 6", image: "/6.png" },
+    { title: "Page 7", image: "/7.png" },
+    { title: "Page 8", image: "/8.png" },
+    { title: "Page 9", image: "/9.png" },
+    { title: "Page 10", image: "/10.png" },
+    { title: "Page 11", image: "/11.png" },
+    { title: "Page 12", image: "/12.png" },
+    { title: "Page 13", image: "/13.png" },
   ]
 
   const handleScroll = (e: WheelEvent) => {
@@ -91,7 +91,7 @@ export default function Component() {
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-[#006C67] via-[#006F74] to-[#006C67] p-4">
       <div className="relative">
         {!isOpen ? (
-          // Closed Book with Photo Cover
+          // Closed Book with Photo Cover - Fixed image path
           <div
             className="cursor-pointer transform transition-all duration-700 hover:scale-105 hover:rotate-1"
             onClick={openBook}
@@ -99,9 +99,13 @@ export default function Component() {
             <Card className="w-80 h-96 shadow-2xl relative overflow-hidden border-4 border-amber-700 bg-black">
               <div className="absolute inset-0">
                 <img
-                  src="/cover.jpg"
+                  src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/cover.jpg`}
                   alt="Photo Book Cover"
                   className="w-full h-full object-cover"
+                  onError={(e) => {
+                    console.error('Failed to load cover image');
+                    e.currentTarget.src = `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/fallback-cover.jpg`;
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30"></div>
               </div>
@@ -128,7 +132,7 @@ export default function Component() {
                   {currentPage > 0 && (
                     <div className="w-full h-full flex items-center justify-center p-4">
                       <img
-                        src={pages[currentPage - 1]?.image}
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${pages[currentPage - 1]?.image}`}
                         alt={pages[currentPage - 1]?.title}
                         className="max-w-full max-h-full object-contain"
                       />
@@ -141,7 +145,7 @@ export default function Component() {
                   {currentPage < pages.length && (
                     <div className="w-full h-full flex items-center justify-center p-4">
                       <img
-                        src={pages[currentPage]?.image}
+                        src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${pages[currentPage]?.image}`}
                         alt={pages[currentPage]?.title}
                         className="max-w-full max-h-full object-contain"
                       />
@@ -158,7 +162,7 @@ export default function Component() {
                       <div className="w-full h-full flex items-center justify-center p-4 transform scale-x-[-1]">
                         {currentPage < pages.length && (
                           <img
-                            src={pages[currentPage]?.image}
+                            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${pages[currentPage]?.image}`}
                             alt={pages[currentPage]?.title}
                             className="max-w-full max-h-full object-contain"
                           />
@@ -170,7 +174,7 @@ export default function Component() {
                       <div className="w-full h-full flex items-center justify-center p-4">
                         {currentPage > 0 && (
                           <img
-                            src={pages[currentPage - 1]?.image}
+                            src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}${pages[currentPage - 1]?.image}`}
                             alt={pages[currentPage - 1]?.title}
                             className="max-w-full max-h-full object-contain"
                           />
