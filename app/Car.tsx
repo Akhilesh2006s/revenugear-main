@@ -582,7 +582,7 @@ export default function Component() {
 
       {/* Navigation Header */}
       <motion.nav
-        className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-4 md:p-6 bg-white/10 backdrop-blur-xl border-b border-white/20 shadow-lg"
+        className="fixed top-0 left-0 right-0 z-50 flex justify-between items-center p-2 md:p-3 bg-white/10 backdrop-blur-xl border-b border-white/20 shadow-lg"
         initial={{ opacity: 0, y: -50 }}
         animate={{
           opacity: 1,
@@ -595,12 +595,12 @@ export default function Component() {
         }}
       >
         <motion.div
-          className="flex items-center space-x-4"
+          className="flex items-center space-x-3"
           whileHover={{ scale: 1.02 }}
           transition={{ type: "spring", stiffness: 300 }}
         >
           <motion.div
-            className="w-16 h-16 md:w-20 md:h-20 flex items-center justify-center overflow-hidden rounded-xl bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg"
+            className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center overflow-hidden rounded-lg bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg"
             whileHover={{
               rotate: 360,
               scale: 1.1,
@@ -608,7 +608,7 @@ export default function Component() {
             }}
             transition={{ duration: 0.6 }}
           >
-            <img src="/logo1.png" alt="Revenue Gear Logo" className="w-12 h-12 md:w-16 md:h-16 object-contain" />
+            <img src="/logo1.png" alt="Revenue Gear Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain" />
           </motion.div>
 
           <motion.div
@@ -617,10 +617,10 @@ export default function Component() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
           >
-            <h1 className="text-xl md:text-2xl font-bold text-[#006C67] tracking-wide font-['Poppins',sans-serif]">
+            <h1 className="text-lg md:text-xl font-bold text-[#006C67] tracking-wide font-['Poppins',sans-serif]">
               Revenue Gear
             </h1>
-            <p className="text-sm text-[#4B9C99] font-light">AI-Powered Intelligence</p>
+            <p className="text-xs text-[#4B9C99] font-light">AI-Powered Intelligence</p>
           </motion.div>
         </motion.div>
 
@@ -634,7 +634,7 @@ export default function Component() {
             href="https://revlabs.tech/#contact"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-gradient-to-r from-[#006C67] to-[#006F74] text-white px-6 py-3 md:px-8 md:py-4 rounded-full hover:from-[#006F74] hover:to-[#005A5F] transition-all duration-300 font-semibold tracking-wide font-['Poppins',sans-serif] shadow-xl text-sm md:text-base relative overflow-hidden group"
+            className="bg-gradient-to-r from-[#006C67] to-[#006F74] text-white px-4 py-2 md:px-6 md:py-3 rounded-full hover:from-[#006F74] hover:to-[#005A5F] transition-all duration-300 font-semibold tracking-wide font-['Poppins',sans-serif] shadow-xl text-xs md:text-sm relative overflow-hidden group"
             whileHover={{
               scale: 1.05,
               boxShadow: "0 15px 35px rgba(0, 108, 103, 0.4)",
@@ -644,7 +644,7 @@ export default function Component() {
             <span className="relative z-10 flex items-center space-x-2">
               <span>Contact Us</span>
               <motion.svg
-                className="w-4 h-4"
+                className="w-3 h-3 md:w-4 md:h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -682,8 +682,8 @@ export default function Component() {
       {/* Scrollable Content */}
       <div className="relative z-10">
         {/* Welcome Section */}
-        <div className="h-screen flex flex-col items-center justify-start pt-32 px-8">
-          <div className="text-center mb-12">
+        <div className="h-screen flex flex-col items-center justify-start pt-20 px-8">
+          <div className="text-center mb-8">
             <div className="mb-8 overflow-hidden">
               <StaggeredFlyText
                 text="WELCOME TO"
