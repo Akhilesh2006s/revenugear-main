@@ -522,7 +522,6 @@ export default function Component() {
       {/* Hidden Video for Audio */}
       <video
         ref={videoRef}
-        loop
         muted={isMuted}
         playsInline
         preload="auto"
@@ -533,7 +532,7 @@ export default function Component() {
           }
         }}
       >
-        <source src="/4.mp4" type="video/mp4" />
+        <source src="/5.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
       {/* Audio Control Button */}
