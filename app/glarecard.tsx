@@ -50,15 +50,15 @@ export default function StackedGlareCards() {
   return (
     <div className="container mx-auto py-12 px-4 max-w-7xl">
       {/* Tab Navigation */}
-      <div className="flex flex-wrap justify-center gap-4 mb-12">
+      <div className="flex flex-wrap justify-center gap-4 mb-12 relative z-10">
         {features.map((feature, index) => (
           <button
             key={index}
             onClick={() => setActiveTab(index)}
-            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 ${
+            className={`px-6 py-3 rounded-full text-sm font-medium transition-all duration-300 cursor-pointer hover:scale-105 active:scale-95 ${
               activeTab === index
-                ? "bg-gray-200 text-gray-700 hover:bg-gray-105"
-                : "bg-[#006C67] text-white shadow-lg scale-300"
+                ? "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                : "bg-[#006C67] text-white shadow-lg hover:bg-[#005550]"
             }`}
           >
             {feature.shortTitle}
@@ -109,13 +109,13 @@ export default function StackedGlareCards() {
       </div>
 
       {/* Stack Indicator */}
-      <div className="flex justify-center mt-8 gap-2">
+      <div className="flex justify-center mt-8 gap-2 relative z-10">
         {features.map((_, index) => (
           <button
             key={index}
             onClick={() => setActiveTab(index)}
-            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-              activeTab === index ? "bg-gray-300 hover:bg-gray-400" : " bg-[#006C67] scale-125"
+            className={`w-3 h-3 rounded-full transition-all duration-300 cursor-pointer hover:scale-110 ${
+              activeTab === index ? "bg-gray-300 hover:bg-gray-400" : "bg-[#006C67] hover:bg-[#005550]"
             }`}
           />
         ))}
