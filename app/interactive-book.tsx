@@ -99,7 +99,7 @@ export default function Component() {
             <Card className="w-80 h-96 shadow-2xl relative overflow-hidden border-4 border-amber-700 bg-black">
               <div className="absolute inset-0">
                 <img
-                  src="cover.jpg"
+                  src="/cover.jpg"
                   alt="Photo Book Cover"
                   className="w-full h-full object-cover"
                 />
