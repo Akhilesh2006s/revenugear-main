@@ -48,7 +48,7 @@ function Scene({ scrollY }: SceneProps) {
       {/* White transparent overlay */}
       <mesh position={[0, 0, 4.9]}>
         <planeGeometry args={[20, 20]} />
-        <meshBasicMaterial color="white" transparent={true} opacity={0.3} />
+        <meshBasicMaterial color="white" transparent={true} opacity={0.2} />
       </mesh>
     </>
   )
