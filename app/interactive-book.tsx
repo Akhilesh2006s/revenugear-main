@@ -12,21 +12,15 @@ export default function Component() {
   const [flipDirection, setFlipDirection] = useState<"next" | "prev">("next")
   const scrollTimeoutRef = useRef<NodeJS.Timeout>()
   const lastScrollTime = useRef(0)
+  const audioRef = useRef<HTMLAudioElement>(null)
+  const [isHovered, setIsHovered] = useState(false)
 
   const pages = [
-    { title: "Page 1", image: "1.png" },
-    { title: "Page 2", image: "2.png" },
-    { title: "Page 3", image: "3.png" },
-    { title: "Page 4", image: "4.png" },
-    { title: "Page 5", image: "5.png" },
-    { title: "Page 6", image: "6.png" },
-    { title: "Page 7", image: "7.png" },
-    { title: "Page 8", image: "8.png" },
-    { title: "Page 9", image: "9.png" },
-    { title: "Page 10", image: "10.png" },
-    { title: "Page 11", image: "11.png" },
-    { title: "Page 12", image: "12.png" },
-    { title: "Page 13", image: "13.png" },
+    { title: "Page 1", image: "300.png" },
+    { title: "Page 2", image: "301.png" },
+    { title: "Page 3", image: "306.png" },
+    { title: "Page 4", image: "200.png" },
+    
   ]
 
   const handleScroll = (e: WheelEvent) => {
@@ -78,6 +72,11 @@ export default function Component() {
   }, [isOpen, currentPage, isFlipping])
 
   const openBook = () => {
+    // Play sound effect
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0
+      audioRef.current.play().catch(console.error)
+    }
     setIsOpen(true)
     setCurrentPage(0)
   }
@@ -99,15 +98,21 @@ export default function Component() {
           <div className="w-3 h-3 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: "0.1s" }}></div>
           <div className="w-3 h-3 bg-white rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></div>
         </div>
-        
       </div>
 
       <div className="relative">
         {!isOpen ? (
-          // Closed Book with Photo Cover
+          // Closed Book with Photo Cover - Tilted to the left
           <div
-            className="cursor-pointer transform transition-all duration-700 hover:scale-105 hover:rotate-1"
+            className="cursor-pointer transform perspective-1000 transition-all duration-500 hover:scale-105"
             onClick={openBook}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            style={{
+              transform: isHovered ? "rotateZ(-25deg) rotateY(10deg) scale(1.05)" : "rotateZ(-15deg)",
+              transformStyle: "preserve-3d",
+              perspective: "1000px",
+            }}
           >
             <Card className="w-80 h-96 shadow-2xl relative overflow-hidden border-4 border-amber-700 bg-black">
               <div className="absolute inset-0">
@@ -115,12 +120,12 @@ export default function Component() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30"></div>
               </div>
               <div className="absolute inset-0 p-8 flex flex-col justify-end items-center text-white">
-                <div className="text-amber-300 text-sm bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
+                <div className="text-amber-300 text-sm bg-black/50 px-4 py-1 rounded-full backdrop-blur-sm">
                   Click to explore • Scroll to turn pages
                 </div>
               </div>
-              <div className="absolute left-0 top-0 w-3 h-full bg-gradient-to-r from-amber-900 to-amber-700 shadow-inner"></div>
-              <div className="absolute left-3 top-0 w-1 h-full bg-amber-600"></div>
+              <div className="absolute right-0 top-0 w-3 h-full bg-gradient-to-l from-amber-900 to-amber-700 shadow-inner"></div>
+              <div className="absolute right-3 top-0 w-1 h-full bg-amber-600"></div>
             </Card>
           </div>
         ) : (
@@ -133,28 +138,32 @@ export default function Component() {
               {/* Current Page Spread */}
               <div className="absolute inset-0 flex">
                 {/* Left Page */}
-                <div className="w-1/2 h-full flex items-center justify-center border-r border-amber-200 bg-gray-50">
+                <div className="w-1/2 h-full flex items-center justify-center border-r border-amber-200 relative overflow-hidden">
                   {currentPage > 0 && (
-                    <div className="w-full h-full flex items-center justify-center p-4">
-                      <img
-                        src={pages[currentPage - 1]?.image || "/placeholder.svg"}
-                        alt={pages[currentPage - 1]?.title}
-                        className="max-w-full max-h-full object-contain"
+                    <>
+                      <div
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${pages[currentPage - 1]?.image || "/placeholder.svg"})`,
+                        }}
                       />
-                    </div>
+                      <div className="absolute inset-0 bg-black/10" />
+                    </>
                   )}
                 </div>
 
                 {/* Right Page */}
-                <div className="w-1/2 h-full flex items-center justify-center bg-gray-50">
+                <div className="w-1/2 h-full flex items-center justify-center relative overflow-hidden">
                   {currentPage < pages.length && (
-                    <div className="w-full h-full flex items-center justify-center p-4">
-                      <img
-                        src={pages[currentPage]?.image || "/placeholder.svg"}
-                        alt={pages[currentPage]?.title}
-                        className="max-w-full max-h-full object-contain"
+                    <>
+                      <div
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${pages[currentPage]?.image || "/placeholder.svg"})`,
+                        }}
                       />
-                    </div>
+                      <div className="absolute inset-0 bg-black/10" />
+                    </>
                   )}
                 </div>
               </div>
@@ -163,28 +172,24 @@ export default function Component() {
               {isFlipping && (
                 <div className="absolute inset-0 z-10 pointer-events-none">
                   {flipDirection === "next" ? (
-                    <div className="absolute right-0 top-0 w-1/2 h-full bg-white origin-left animate-flip-next shadow-2xl">
-                      <div className="w-full h-full flex items-center justify-center p-4 transform scale-x-[-1]">
-                        {currentPage < pages.length && (
-                          <img
-                            src={pages[currentPage]?.image || "/placeholder.svg"}
-                            alt={pages[currentPage]?.title}
-                            className="max-w-full max-h-full object-contain"
-                          />
-                        )}
-                      </div>
+                    <div className="absolute right-0 top-0 w-1/2 h-full origin-left animate-flip-next shadow-2xl relative overflow-hidden">
+                      <div
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat transform scale-x-[-1]"
+                        style={{
+                          backgroundImage: `url(${pages[currentPage]?.image || "/placeholder.svg"})`,
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/10" />
                     </div>
                   ) : (
-                    <div className="absolute left-0 top-0 w-1/2 h-full bg-white origin-right animate-flip-prev shadow-2xl">
-                      <div className="w-full h-full flex items-center justify-center p-4">
-                        {currentPage > 0 && (
-                          <img
-                            src={pages[currentPage - 1]?.image || "/placeholder.svg"}
-                            alt={pages[currentPage - 1]?.title}
-                            className="max-w-full max-h-full object-contain"
-                          />
-                        )}
-                      </div>
+                    <div className="absolute left-0 top-0 w-1/2 h-full origin-right animate-flip-prev shadow-2xl relative overflow-hidden">
+                      <div
+                        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                        style={{
+                          backgroundImage: `url(${pages[currentPage - 1]?.image || "/placeholder.svg"})`,
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-black/10" />
                     </div>
                   )}
                 </div>
@@ -219,6 +224,12 @@ export default function Component() {
           </div>
         )}
       </div>
+
+      {/* Audio element for book opening sound */}
+      <audio ref={audioRef} preload="auto">
+        <source src="/book.mp4" type="audio/mp4" />
+        <source src="/book.m4a" type="audio/mp4" />
+      </audio>
 
       <style jsx global>{`
         @keyframes flip-next {
