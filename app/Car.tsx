@@ -14,7 +14,7 @@ interface RotatingModelProps {
 
 function RotatingModel({ scrollY }: RotatingModelProps) {
   const modelRef = useRef<Group>(null)
-  const { scene } = useGLTF("13.glb")
+  const { scene } = useGLTF("10.glb")
 
   useFrame(() => {
     if (modelRef.current) {
@@ -37,7 +37,7 @@ interface SceneProps {
 function Scene({ scrollY }: SceneProps) {
   return (
     <>
-      <PerspectiveCamera makeDefault position={[0, 0, 6]} />
+      <PerspectiveCamera makeDefault position={[0, -0.3, 6]} />
       <ambientLight intensity={0.8} />
       <directionalLight position={[10, 10, 5]} intensity={1.2} />
       <pointLight position={[-10, -10, -5]} intensity={0.6} />
@@ -48,7 +48,7 @@ function Scene({ scrollY }: SceneProps) {
       {/* White transparent overlay */}
       <mesh position={[0, 0, 4.9]}>
         <planeGeometry args={[20, 20]} />
-        <meshBasicMaterial color="white" transparent={true} opacity={0.2} />
+        <meshBasicMaterial color="white" transparent={true} opacity={0.85} />
       </mesh>
     </>
   )
@@ -573,8 +573,8 @@ export default function Component() {
     <div className="relative min-h-screen bg-[#E6F6F7]">
       {/* Audio Element - plays once until it ends */}
       <audio ref={audioRef} preload="auto" style={{ display: "none" }}>
-        <source src="/6.mp4" type="audio/mp4" />
-        <source src="/6.mp3" type="audio/mpeg" />
+        <source src="/1000.mp4" type="audio/mp4" />
+        <source src="/1000.mp3" type="audio/mpeg" />
         <source src="/audio.mp3" type="audio/mpeg" />
         Your browser does not support the audio element.
       </audio>
@@ -610,17 +610,7 @@ export default function Component() {
             <img src="/logo1.png" alt="Revenue Gear Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain" />
           </motion.div>
 
-          <motion.div
-            className="hidden md:block"
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-          >
-            <h1 className="text-lg md:text-xl font-bold text-[#006C67] tracking-wide font-['Poppins',sans-serif]">
-              Revenue Gear
-            </h1>
-            <p className="text-xs text-[#4B9C99] font-light">AI-Powered Intelligence</p>
-          </motion.div>
+         
         </motion.div>
 
         <motion.div
