@@ -22,16 +22,7 @@ export default function RootLayout({
       </head>
       <body>
         {/* Optional: Logo header shown on all pages */}
-        <header className="flex items-center gap-3 p-4 shadow-sm">
-          <img
-            src="logo1.png"
-            alt="RevenueGear Logo"
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
-          <h1 className="text-xl font-bold text-[#006C67]">RevenueGear</h1>
-        </header>
+        
 
         {/* Main Page Content */}
         {children}
