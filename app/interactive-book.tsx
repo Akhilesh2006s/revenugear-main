@@ -87,7 +87,7 @@ export default function Component() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#006C67] via-[#006F74] to-[#006C67] p-4">
+<div className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-br from-[#006C67] via-[#006F74] to-[#006C67] p-20 pt-32">
       {/* Animated Heading */}
       <div className="mb-8 text-center">
         <h1 className="text-6xl md:text-8xl font-bold bg-gradient-to-r from-white via-gray-100 to-white bg-clip-text text-transparent animate-pulse-glow font-serif tracking-wider drop-shadow-2xl">
@@ -114,7 +114,7 @@ export default function Component() {
               perspective: "1000px",
             }}
           >
-            <Card className="w-80 h-96 shadow-2xl relative overflow-hidden border-4 border-amber-700 bg-black">
+<Card className="w-[500px] h-[600px] shadow-2xl relative overflow-hidden border-4 border-amber-700 bg-black">
               <div className="absolute inset-0">
                 <img src="COVER.jpg" alt="Photo Book Cover" className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/30"></div>
