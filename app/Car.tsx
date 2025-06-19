@@ -48,7 +48,7 @@ function Scene({ scrollY }: SceneProps) {
       {/* White transparent overlay */}
       <mesh position={[0, 0, 4.9]}>
         <planeGeometry args={[20, 20]} />
-        <meshBasicMaterial color="white" transparent={true} opacity={0.85} />
+<meshBasicMaterial color="#E6F6F7" transparent={true} opacity={0.85} />
       </mesh>
     </>
   )
@@ -438,8 +438,8 @@ export default function Component() {
   const [lastScrollY, setLastScrollY] = useState(0)
 
   // Model opacity and scale - instant disappear when reaching "Experience the Difference" section
-  const modelOpacity = useTransform(scrollYProgress, [0.65, 0.66], [1, 0])
-  const modelScale = useTransform(scrollYProgress, [0.65, 0.66], [1, 1])
+  const modelOpacity = useTransform(scrollYProgress, [0.68, 0.72], [1, 0])
+  const modelScale = useTransform(scrollYProgress, [0.68, 0.72], [1, 0.8])
 
   const [audioStarted, setAudioStarted] = useState(false)
   const audioRef = useRef<HTMLAudioElement>(null)
@@ -609,8 +609,6 @@ export default function Component() {
           >
             <img src="/logo1.png" alt="Revenue Gear Logo" className="w-8 h-8 md:w-10 md:h-10 object-contain" />
           </motion.div>
-
-         
         </motion.div>
 
         <motion.div
@@ -676,7 +674,7 @@ export default function Component() {
             <div className="mb-8 overflow-hidden">
               <StaggeredFlyText
                 text="WELCOME TO"
-                 className="text-5xl md:text-7xl font-semibold text-[#006C67] tracking-wider leading-tight
+                className="text-5xl md:text-7xl font-semibold text-[#006C67] tracking-wider leading-tight
                    hover:text-[#006F74] transition-all duration-700 ease-out cursor-default
                    hover:tracking-widest transform hover:scale-105
                    font-['Playfair_Display',serif] antialiased"
